@@ -5,11 +5,20 @@
 @section('content')
 <div class="container">
 	<div class="panel panel-default">
-		<div class="panel-heading">Proyectos</div>
+		<div class="panel-heading">
+			Proyectos 
+		</div>
+
+		<form class="navbar-form navbar-left pull-right" role="search" action="consultarProyecto" method="GET">
+			<div class="form-group">
+				<input name="name" type="text" class="form-control" placeholder="nombre o código...">
+			</div>
+			<button class="btn btn-default" type="submit">Buscar</button>
+		</form>
 
 		<div class="panel-body">
 			<div class="col-md-12">
-				<table id="activityTable" class="table table-bordered table-hover">
+				<table id="activityTable" class="table .table-striped">
 					<tr>
 						<th>IDCA</th>
 						<th>Nombre de Proyecto</th>
@@ -37,6 +46,7 @@
 					</tr>
 					@endforeach
 				</table>
+				{!! $projects->render() !!}
 			</div>
 				
 		</div>

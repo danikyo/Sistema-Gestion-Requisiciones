@@ -7,8 +7,8 @@ function mainFunction()
 		$('#btnNewProject').attr('disabled', 'disabled');
 	}          
 
-	$idA = parseInt($('#idActivity').html())+1;
-	$idR = parseInt($('#idResource').html())+1;
+	$idA = parseInt($('#idActivity').html())+1; //lleva el indice de las actividades que se guardaran en la base de datos
+	$idR = parseInt($('#idResource').html())+1; //lleva el indice de los recursos que se guardaran en la base de datos
 
 	$("#btnNewActivity").on('click', funcNewActivity);
 	$("#btnNewResource").on('click', funcNewResource);
@@ -43,11 +43,20 @@ function funcNewActivity()
 			)
 		)
 	)
+
+	$('#select_idActivity')
+	.append
+	(
+		$('<option>').text($idA)
+	)
+
 	$idA++;
 }
 
 function funcNewResource()
 {
+	$IDactivity = $('#select_idActivity option:selected').text()
+
 	$('#resourceTable')
 	.append
 	(
@@ -65,7 +74,7 @@ function funcNewResource()
 			$('<td>')
 			.append
 			(
-				$('<input>').attr('id', 'resource-IDactivity').attr('type', 'text').attr('name', 'resource-IDactivity[]').addClass('form-control')
+				$('<input>').attr('id', 'resource-IDactivity').attr('type', 'text').attr('name', 'resource-IDactivity[]').attr('value', $IDactivity).attr('readonly', 'readonly').addClass('form-control')
 			)
 		)
 		.append
@@ -85,11 +94,20 @@ function funcNewResource()
 			)
 		)
 	)
+
+	$('#select_idResources')
+	.append
+	(
+		$('<option>').text($idR)
+	)
+
 	$idR++;
 }
 
 function funcNewProduct()
 {
+	$IDresource = $('#select_idResources option:selected').text()
+
 	$('#productTable')
 	.append
 	(
@@ -99,7 +117,7 @@ function funcNewProduct()
 			$('<td>')
 			.append
 			(
-				$('<input id="product-IDresource" type="text" name="product-IDresource[]" class="form-control">')
+				$('<input id="product-IDresource" type="text" name="product-IDresource[]" class="form-control" value="'+$IDresource+'" required readonly>')
 				//$('<input>').attr('id', 'product-IDresource').attr('type', 'text').attr('name', 'product-IDresource[]').addClass('form-control')
 			)
 		)
@@ -199,8 +217,9 @@ function funcDeleteActivity()
 
     if(rowCount > 2)
     {
-    table.deleteRow(rowCount -1);
-    $idA--;
+    table.deleteRow(rowCount -1); //elimina el ultimo elemento de la tabla
+    $("select[id=select_idActivity] option:last").remove(); //elimina el último select
+    $idA--; 
 	}
 }
 
@@ -212,6 +231,7 @@ function funcDelResource()
     if(rowCount > 2)
     {
     table.deleteRow(rowCount -1);
+    $("select[id=select_idResources] option:last").remove();
     $idR--;
 	}
 }

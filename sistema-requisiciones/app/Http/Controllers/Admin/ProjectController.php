@@ -22,10 +22,18 @@ class ProjectController extends Controller
     	return view('project.index')->with(compact('activities', 'resources', 'users'));
     }
 
-    public function read()
+    public function read(Request $request)
     {
-        $projects = Project::all();
-        return view('project.read')->with(compact('projects'));
+        if($request->get('name') != '')
+        {
+            $projects = Project::search($request->get('name'))->paginate('10');
+        }
+        else
+        {
+            $projects = Project::paginate('10');
+        }
+
+        return view('project.read')->with(compact('projects',$projects));
     }
 
     public function edit($id)
@@ -38,15 +46,7 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'resource-IDactivity' => 'exists:activities,id',
-            'product-IDresource' => 'exists:resources,id',
-            'user-IDactivity' => 'exists:activities,id'
-        ];
-
-        $messages = [
-            'resource-IDactivity.exists' => 'El ID de actividad escrito en recursos no existe en la base de datos',
-            'product-IDresource.exists' => 'El ID de recurso escrito en productos no existe en la base de datos',
-            'user-IDactivity.exists' => 'El ID de actividad escrito en usuarios no existe en la base de datos'
+            'idca' => 'unique:projects,id',
         ];
 
         //$this->validate($request, $rules, $messages);
@@ -62,7 +62,6 @@ class ProjectController extends Controller
     	$project->currentAmount = $request->input('amount');
     	$project->save();
 
-
         foreach($request->input('activityDescription') as $d)
         {
             $activity = new Activity();
@@ -70,17 +69,6 @@ class ProjectController extends Controller
 
             $projectA = Project::find($project->id);
             $projectA->activities()->save($activity);
-
-        }
-
-        $i = 0;
-        foreach($request->input('id-user') as $ua)
-        {
-            $user = User::find($ua);
-            $activityFind = $request->input('user-IDactivity')[$i];
-            Activity::find($activityFind)->users()->attach($user);
-
-            $i++;
         }
 
         $i = 0;
@@ -106,6 +94,16 @@ class ProjectController extends Controller
 
             $resource = Resource::find($request->input('product-IDresource')[$i]);
             $resource->products()->save($product);
+
+            $i++;
+        }
+
+        $i = 0;
+        foreach($request->input('id-user') as $ua)
+        {
+            $user = User::find($ua);
+            $activityFind = $request->input('user-IDactivity')[$i];
+            Activity::find($activityFind)->users()->attach($user);
 
             $i++;
         }

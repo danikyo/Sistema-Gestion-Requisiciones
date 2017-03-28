@@ -9,7 +9,7 @@
 
                 <div class="panel-body">
 
-                    @if (count($errors) > 0)
+                    <!--@if (count($errors) > 0)
                         <div class="alert alert-danger">
                             <ul>
                                 @foreach ($errors->all() as $error)
@@ -17,9 +17,9 @@
                                 @endforeach
                             </ul>
                         </div>
-                    @endif
+                    @endif-->
 
-                    <form class="form-horizontal" role="form" method="POST" action="{{ route('register') }}">
+                    <form class="form-horizontal" role="form" method="POST" action="">
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">

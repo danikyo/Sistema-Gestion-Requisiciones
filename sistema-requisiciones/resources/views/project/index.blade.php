@@ -94,6 +94,7 @@
                     		</div>
                     	</div>
 
+                        <!--Actividades-->
                         <div class="form-group"> 
                             <br><br>
                             <div class="col-md-12 table-responsive">
@@ -120,13 +121,33 @@
                                 </table>
                             </div>
                         </div>
+                        <!--End Actividades-->
 
+                        <!--Recursos-->
                         <div class="form-group">
                             <br><br>
                             <div class="col-md-12 table-responsive">
-                                <div id="btnNewResource" class="btn btn-success btn-sm" title="Agregar"><span class="glyphicon glyphicon-plus-sign"></span></div>
-                                <div id="btnDelResource" class="btn btn-danger btn-sm" title="Eliminar"><span class="glyphicon glyphicon-minus-sign"></span></div>
-                                <label class="label-control"> Recursos</label>
+                                
+                                <div class="form-group col-md-10">
+                                    <label for="select_idActivity" class="control-label col-md-2">ID Actividad</label>
+                                    <div class="col-md-2">
+                                       <select name="" id="select_idActivity" class="form-control">
+                                           @if (isset($activities))
+                                                <option value=""> {{$activities->id+1}} </option>
+                                           @else
+                                                <option value=""> 1 </option>
+                                           @endif 
+                                       </select>
+                                    </div>
+
+                                    <div class="col-md-1">
+                                        <div id="btnNewResource" class="btn btn-primary" title="Agregar"><span class="glyphicon glyphicon-plus-sign"></span></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div id="btnDelResource" class="btn btn-danger" title="Quitar"><span class="glyphicon glyphicon-minus-sign"></span></div>
+                                    </div>
+                                </div>
+                                
                                 <table  id="resourceTable" class="table table-bordered table-hover">
                                     <tr>
                                         <th>ID Recurso</th>
@@ -143,7 +164,11 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <input type="text" id="resource-IDactivity" name="resource-IDactivity[]" value="{{ old('resource-IDactivity[]') }}" required autofocus class="form-control">
+                                           @if (isset($activities))
+                                               <input type="text" id="resource-IDactivity" name="resource-IDactivity[]" value="{{$activities->id+1}}" required autofocus readonly class="form-control"> 
+                                           @else
+                                               <input type="text" id="resource-IDactivity" name="resource-IDactivity[]" value="1" required autofocus readonly class="form-control">  
+                                           @endif 
                                         </td>
                                         <td>
                                             <input id="resourceType" type="text" name="resourceType[]" value="{{ old('resourceType[]') }}" required autofocus class="form-control">
@@ -155,13 +180,33 @@
                                 </table>
                             </div>
                         </div>
+                        <!--End Recursos-->
 
+                        <!--Productos-->
                         <div class="form-group">
                             <br><br>
                             <div class="col-md-12 table-responsive">
-                                <div id="btnNewProduct" class="btn btn-success btn-sm" title="Agregar"><span class="glyphicon glyphicon-plus-sign"></span></div>
-                                <div id="btnDelProduct" class="btn btn-danger btn-sm" title="Eliminar"><span class="glyphicon glyphicon-minus-sign"></span></div>
-                                <label class="label-control"> Productos</label>
+
+                                <div class="form-group col-md-10">
+                                    <label for="select_idResources" class="control-label col-md-2">ID Recurso</label>
+                                    <div class="col-md-2">
+                                       <select name="" id="select_idResources" class="form-control">
+                                           @if (isset($resources))
+                                                <option value=""> {{$resources->id+1}} </option>
+                                           @else
+                                                <option value=""> 1 </option>
+                                           @endif 
+                                       </select>
+                                    </div>
+
+                                    <div class="col-md-1">
+                                        <div id="btnNewProduct" class="btn btn-primary" title="Agregar"><span class="glyphicon glyphicon-plus-sign"></span></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div id="btnDelProduct" class="btn btn-danger" title="Quitar"><span class="glyphicon glyphicon-minus-sign"></span></div>
+                                    </div>
+                                </div>
+
                                 <table  id="productTable" class="table table-bordered table-hover">
                                     <tr>
                                         <th>ID Recurso</th>
@@ -171,7 +216,12 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <input id="product-IDresource" type="text" name="product-IDresource[]" value="{{ old('product-IDresource[]') }}" required autofocus class="form-control">
+                                            @if (isset($resources))
+                                               <input id="product-IDresource" type="text" name="product-IDresource[]" value="{{ $resources->id+1 }}" readonly required autofocus class="form-control"> 
+                                            @else
+                                                <input id="product-IDresource" type="text" name="product-IDresource[]" value="1" readonly required autofocus class="form-control"> 
+                                            @endif
+                                            
                                         </td>
                                         <td>
                                             <input id="productName" type="text" name="productName[]" value="{{ old('productName[]') }}" required autofocus class="form-control">
@@ -186,7 +236,9 @@
                                 </table>
                             </div>
                         </div>
+                        <!--End Productos-->
 
+                        <!--Usuarios-->
                         <div class="form-group">
                             <br><br>
                             <div class="form-group col-md-10">
@@ -217,6 +269,8 @@
                     			<button id="btnNewProject" class="btn btn-primary">Registrar Proyecto</button>
                     		</div>
                     	</div>
+                        <!--End Usuarios-->
+
                     </form>
 				</div>
 			</div>

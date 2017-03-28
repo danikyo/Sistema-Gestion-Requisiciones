@@ -14,4 +14,10 @@ class Project extends Model
     {
     	return $this->hasMany('App\Activity');
     }
+
+    public function scopeSearch($query, $dato)
+    {
+    	$query->where('name', 'LIKE', '%'.$dato.'%')
+    	->orwhere('id', 'LIKE', '%'.$dato.'%');
+    }
 }
