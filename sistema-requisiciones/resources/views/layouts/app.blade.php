@@ -52,39 +52,83 @@
                         @if (Auth::guest())
                             <li><a href="{{ route('login') }}">Login</a></li>
                             <li><a href="{{ route('register') }}">Registrarse</a></li>
-                        @else   
-                        @if (auth()->user()-> is_planeacion)
-                        <li class="dropdown">
-                            <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                Proyectos <span class="caret"></span>
-                            </a>
+                        @else
+                            @if (auth()->user()->auth == true)
+                                <li><a href="requisicion-nueva">Solicitar Requisición</a></li>
+                                    @if (auth()->user()-> is_planeacion)
+                                        <li class="dropdown">
+                                            <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                                Proyectos <span class="caret"></span>
+                                            </a>
 
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="nuevoProyecto">Nuevo</a></li>
-                                <li><a href="consultarProyecto">Consultar</a></li>
-                            </ul>
-                        </li>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li><a href="nuevoProyecto">Nuevo</a></li>
+                                                <li><a href="consultarProyecto">Consultar</a></li>
+                                            </ul>
+                                        </li>
+                                    @endif
+                                    @if (auth()->user()-> is_admin)
+                                        <li class="dropdown">
+                                            <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                                Requisiciones <span class="caret"></span>
+                                            </a>
+
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li><a href="requisicion-consultar">Consultar</a></li>
+                                            </ul>
+                                        </li>
+                                    @endif
+                                    @if (auth()->user()-> is_compras)
+                                        <li class="dropdown">
+                                            <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                                Requisiciones <span class="caret"></span>
+                                            </a>
+
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li><a href="requisicion-consultar">Ejercer</a></li>
+                                            </ul>
+                                        </li>
+                                    @endif
+                                    @if (auth()->user()->is_secretario)
+                                        <li class="dropdown">
+                                            <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                                Usuarios <span class="caret"></span>
+                                            </a>
+
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li><a href="usuario-consultar">Consultar</a></li>
+                                            </ul>
+                                        </li>
+                                    @endif
+                            @endif
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                </a>
+
+                                <ul class="dropdown-menu" role="menu">
+                                    @if (auth()->user()->auth == true)
+                                        <li>
+                                            <a href="requisicion-mis-requisiciones">Mis requisiciones</a>
+                                        </li>
+                                        <li>
+                                            <a href="perfil">Mi perfil</a>
+                                        </li>
+                                    @endif
+                                    <li>
+                                        <a href="{{ route('logout') }}"
+                                            onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                            Logout
+                                        </a>
+
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                            {{ csrf_field() }}
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
                         @endif
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                {{ Auth::user()->name }} <span class="caret"></span>
-                            </a>
-
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a href="{{ route('logout') }}"
-                                        onclick="event.preventDefault();
-                                                 document.getElementById('logout-form').submit();">
-                                        Logout
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        {{ csrf_field() }}
-                                    </form>
-                                </li>
-                            </ul>
-                        @endif
-                        </li>
                     </ul>
                 </div>
             </div>
@@ -98,5 +142,6 @@
     <script src="{{ asset('js/jquery-3.2.0.min.js') }}"></script>
     <script src="{{ asset('js/jquery.js') }}"></script>
     <script src="{{ asset('js/activityEdition.js') }}"></script>
+    @yield('scripts')
 </body>
 </html>

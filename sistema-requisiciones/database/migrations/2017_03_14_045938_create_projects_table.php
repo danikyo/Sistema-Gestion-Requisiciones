@@ -21,6 +21,7 @@ class CreateProjectsTable extends Migration
             $table->date('startDate');
             $table->date('endDate');
             $table->string('description');
+            $table->string('Amount');
             $table->string('currentAmount');
             $table->timestamps();
         });

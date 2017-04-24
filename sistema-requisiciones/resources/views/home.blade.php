@@ -4,13 +4,15 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <!--<div class="panel-heading">Dashboard</div>
+            @if (auth()->user()->auth == false)
+            <div class="panel panel-warning">
+                <div class="panel-heading">Advertencia</div>
 
-                <div class="panel-body">
-                    You are logged in!
-                </div>-->
+                <div class="panel-body  text-center">
+                    Tu cuenta está en proceso de verificación, una vez sea aprobada, tendrás acceso a las actividades correspondientes 
+                </div>
             </div>
+            @endif
         </div>
     </div>
 </div>

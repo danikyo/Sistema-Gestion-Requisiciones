@@ -18,9 +18,11 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email',250)->unique();
             $table->string('tel');
-            $table->smallInteger('role');
+            $table->smallInteger('role'); // 1-Secretario Académico 2-Planeacion 3-Finanzas 4-Compras 5-Profesor
             $table->string('password');
+            $table->boolean('auth')->default(false);
             $table->rememberToken();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

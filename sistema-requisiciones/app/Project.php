@@ -15,6 +15,11 @@ class Project extends Model
     	return $this->hasMany('App\Activity');
     }
 
+    public function requisicion()
+    {
+        return $this->hasMany('App\Requisicion');
+    }
+
     public function scopeSearch($query, $dato)
     {
     	$query->where('name', 'LIKE', '%'.$dato.'%')

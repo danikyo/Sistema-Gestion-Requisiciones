@@ -6,7 +6,6 @@ use App\Activity;
 use App\Resource;
 use App\User;
 use App\Product;
-//use App\ActivityUser;
 
 
 use Illuminate\Http\Request;
@@ -49,7 +48,17 @@ class ProjectController extends Controller
             'idca' => 'unique:projects,id',
         ];
 
-        //$this->validate($request, $rules, $messages);
+        foreach($request->get('idActivity') as $key => $val)
+        {
+            $rules['idActivity.'.$key] = 'unique:activities,id';
+        }
+
+        foreach($request->get('resource-ID') as $key => $val)
+        {
+            $rules['resource-ID'.$key] = 'unique:resources,id';
+        }
+
+        $this->validate($request, $rules);
 
     	$project = new Project();
     	$project->id = $request->input('idca');
@@ -59,24 +68,36 @@ class ProjectController extends Controller
     	$project->startDate = $request->input('date1');
     	$project->endDate = $request->input('date2');
     	$project->description = $request->input('description');
-    	$project->currentAmount = $request->input('amount');
+
+        $total = 0;
+        $i = 0;
+        foreach($request->input('product-IDresource') as $p)
+        {
+            $total += $request->input('productPrice')[$i];
+            $i++;
+        }
+    	$project->currentAmount = $total;
+        $project->Amount = $total;
     	$project->save();
 
+        $i = 0;
         foreach($request->input('activityDescription') as $d)
         {
             $activity = new Activity();
+            $activity->id = $request->input('idActivity')[$i];
             $activity->description = $d;
 
             $projectA = Project::find($project->id);
             $projectA->activities()->save($activity);
+            $i++;
         }
 
         $i = 0;
         foreach($request->input('resource-IDactivity') as $r)
         {
             $resource = new Resource();
+            $resource->id = $request->input('resource-ID')[$i];
             $resource->type = $request->input('resourceType')[$i];
-            $resource->amount = $request->input('resourceAmount')[$i];
 
             $activity = Activity::find($request->input('resource-IDactivity')[$i]);
             $activity->resources()->save($resource);
@@ -89,7 +110,6 @@ class ProjectController extends Controller
         {
             $product = new Product();
             $product->name = $request->input('productName')[$i];
-            $product->quantity = $request->input('productQuantity')[$i];
             $product->price = $request->input('productPrice')[$i];
 
             $resource = Resource::find($request->input('product-IDresource')[$i]);
@@ -111,8 +131,8 @@ class ProjectController extends Controller
     	return back()->with('notification', 'Proyecto Registrado Satisfactoriamente!');
     }
 
-    public function byUser($dato)
+    public function byUser($data)
     {
-        return User::where('id', $dato)->get();
+        return User::where('id', $data)->get();
     }
 }

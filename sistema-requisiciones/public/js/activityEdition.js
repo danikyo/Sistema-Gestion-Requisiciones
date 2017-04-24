@@ -7,14 +7,14 @@ function mainFunction()
 		$('#btnNewProject').attr('disabled', 'disabled');
 	}          
 
-	$idA = parseInt($('#idActivity').html())+1; //lleva el indice de las actividades que se guardaran en la base de datos
-	$idR = parseInt($('#idResource').html())+1; //lleva el indice de los recursos que se guardaran en la base de datos
+	//$idA = parseInt($('#idActivity').html())+1; //lleva el indice de las actividades que se guardaran en la base de datos
+	//$idR = parseInt($('#idResource').html())+1; //lleva el indice de los recursos que se guardaran en la base de datos
 
 	$("#btnNewActivity").on('click', funcNewActivity);
 	$("#btnNewResource").on('click', funcNewResource);
 	$("#btnNewProduct").on('click', funcNewProduct);
 	$("#btnNewUser").on('click', funcNewUser);
-	$("#btnDelActivity").on('click', funcDeleteActivity);
+	$("#btnDelActivity").on('click', funcDelActivity);
 	$("#btnDelResource").on('click', funcDelResource);
 	$("#btnDelProduct").on('click', funcDelProduct);
 	$("body").on('click', '.del', funcDelUser);
@@ -22,16 +22,18 @@ function mainFunction()
 
 function funcNewActivity()
 {
+	$inputActivity = $('#inputActivity').val();
+
 	$("#activityTable")
 	.append
 	(
 		$('<tr>')
 		.append
 		(
-			$('<td>').addClass('text-center')
+			$('<td>').width('100').addClass('text-center')
 			.append
 			(
-				$('<label>').text($idA)
+				$('<input>').attr('value', $inputActivity).attr('id', 'idActivity').attr('type', 'text').attr('name', 'idActivity[]').attr('readonly', 'readonly').addClass('form-control')
 			)
 		)
 		.append
@@ -44,18 +46,17 @@ function funcNewActivity()
 		)
 	)
 
-	$('#select_idActivity')
+	$('#selectActivity')
 	.append
 	(
-		$('<option>').text($idA)
+		$('<option>').text($inputActivity)
 	)
-
-	$idA++;
 }
 
 function funcNewResource()
 {
-	$IDactivity = $('#select_idActivity option:selected').text()
+	$inputResource = $('#inputResource').val();
+	$selectActivity = $('#selectActivity').val();
 
 	$('#resourceTable')
 	.append
@@ -66,7 +67,7 @@ function funcNewResource()
 			$('<td>').addClass('text-center')
 			.append
 			(
-				$('<label>').text($idR)
+				$('<input>').attr('value', $inputResource).attr('id', 'resource-ID').attr('type', 'text').attr('name', 'resource-ID[]').attr('readonly', 'readonly').addClass('form-control')
 			)
 		)
 		.append
@@ -74,7 +75,7 @@ function funcNewResource()
 			$('<td>')
 			.append
 			(
-				$('<input>').attr('id', 'resource-IDactivity').attr('type', 'text').attr('name', 'resource-IDactivity[]').attr('value', $IDactivity).attr('readonly', 'readonly').addClass('form-control')
+				$('<input>').attr('value', $selectActivity).attr('id', 'resource-IDactivity').attr('type', 'text').attr('name', 'resource-IDactivity[]').attr('readonly', 'readonly').addClass('form-control')
 			)
 		)
 		.append
@@ -85,20 +86,12 @@ function funcNewResource()
 				$('<input>').attr('id', 'resourceType').attr('type', 'text').attr('name', 'resourceType[]').addClass('form-control')
 			)
 		)
-		.append
-		(
-			$('<td>')
-			.append
-			(
-				$('<input>').attr('id', 'resourceAmount').attr('type', 'text').attr('name', 'resourceAmount[]').addClass('form-control')
-			)
-		)
 	)
 
-	$('#select_idResources')
+	$('#selectResource')
 	.append
 	(
-		$('<option>').text($idR)
+		$('<option>').text($inputResource)
 	)
 
 	$idR++;
@@ -106,7 +99,7 @@ function funcNewResource()
 
 function funcNewProduct()
 {
-	$IDresource = $('#select_idResources option:selected').text()
+	$selectResource = $('#selectResource').val()
 
 	$('#productTable')
 	.append
@@ -117,7 +110,7 @@ function funcNewProduct()
 			$('<td>')
 			.append
 			(
-				$('<input id="product-IDresource" type="text" name="product-IDresource[]" class="form-control" value="'+$IDresource+'" required readonly>')
+				$('<input id="product-IDresource" type="text" name="product-IDresource[]" class="form-control" value="'+$selectResource+'" required readonly>')
 				//$('<input>').attr('id', 'product-IDresource').attr('type', 'text').attr('name', 'product-IDresource[]').addClass('form-control')
 			)
 		)
@@ -128,21 +121,13 @@ function funcNewProduct()
 			(
 				$('<input>').attr('id', 'productName').attr('type', 'text').attr('name', 'productName[]').addClass('form-control')
 			)
-		) 
-		.append
-		(
-			$('<td>')
-			.append
-			(
-				$('<input>').attr('id', 'productQuantity').attr('type', 'text').attr('name', 'productQuantity[]').addClass('form-control')
-			)
 		)
 		.append
 		(
 			$('<td>')
 			.append
 			(
-				$('<input>').attr('id', 'productPrice').attr('type', 'text').attr('name', 'productPrice[]').addClass('form-control')
+				$('<input>').attr('id', 'productPrice').attr('type', 'number').attr('step', 'any').attr('name', 'productPrice[]').addClass('form-control')
 			)
 		)
 	)
@@ -206,20 +191,18 @@ function funcNewUser()
 	});
 }
 
-function funcDeleteActivity() 
+function funcDelActivity() 
 {
 
-	/*$(this).parent().parent().fadeOut( "slow", function() { $(this).remove(); } );
-	$idA--;*/
+	//$(this).parent().parent().fadeOut( "slow", function() { $(this).remove(); } );
 
 	var table = document.getElementById('activityTable');
     var rowCount = table.rows.length;
 
-    if(rowCount > 2)
+    if(rowCount > 1)
     {
     table.deleteRow(rowCount -1); //elimina el ultimo elemento de la tabla
-    $("select[id=select_idActivity] option:last").remove(); //elimina el último select
-    $idA--; 
+    $("select[id=selectActivity] option:last").remove(); //elimina el último select
 	}
 }
 
@@ -228,11 +211,10 @@ function funcDelResource()
 	var table = document.getElementById('resourceTable');
     var rowCount = table.rows.length;
 
-    if(rowCount > 2)
+    if(rowCount > 1)
     {
     table.deleteRow(rowCount -1);
-    $("select[id=select_idResources] option:last").remove();
-    $idR--;
+    $("select[id=selectResource] option:last").remove();
 	}
 }
 
@@ -241,7 +223,7 @@ function funcDelProduct()
 	var table = document.getElementById('productTable');
     var rowCount = table.rows.length;
 
-    if(rowCount > 2)
+    if(rowCount > 1)
     {
     table.deleteRow(rowCount -1);
 	}

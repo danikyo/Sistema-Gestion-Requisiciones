@@ -24,4 +24,9 @@ class Activity extends Model
     {
         return $this->hasMany('App\Resource');
     }
+
+    public function requisicion()
+    {
+        return $this->hasMany('App\Requisicion');
+    }
 }

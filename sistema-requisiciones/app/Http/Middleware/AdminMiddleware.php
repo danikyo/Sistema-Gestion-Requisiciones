@@ -18,7 +18,7 @@ class AdminMiddleware
         if(!auth()->check())
             return redirect('login');
 
-        if(auth()->user()->role > 1)
+        if(auth()->user()->role != 2 || auth()->user()->auth == false)
             return redirect('home');
         
         return $next($request);

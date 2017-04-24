@@ -46,7 +46,11 @@
 				</div>
 
 				<div class="row">
-					<img src="/images/dictamenProject.png" class="img-responsive center-block" alt="Imagen responsive">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<h3 class="text-center"> {{$project->description}} </h3>
+						</div>
+					</div>
 				</div>
 
 				@foreach($activities as $activity)
@@ -126,8 +130,19 @@
 						<table class="table table-condensed">
 							<tr>
 								<th class="text-center" width="200">Monto Total Aprobado al Cuerpo Académico</th>
-								<td class="text-center" style="font-size: 3vh"> ${{$project->currentAmount}} </td>
+								<td class="text-center" style="font-size: 3vh"> ${{$project->Amount}} </td>
 							</tr>
+							@if ($project->currentAmount != 0)
+								<tr>
+									<th class="text-center" width="200">Monto Total Disponible</th>
+									<td class="text-center" style="font-size: 3vh"> ${{$project->currentAmount}} </td>
+								</tr>
+							@else
+								<tr class="text-center">
+									<th class="text-center" width="200">Status</th>
+									<td class="text-center" width="200">Proyecto Ejercido</td>
+								</tr>
+							@endif
 						</table>
 					</div>
 				</div>
