@@ -12,6 +12,8 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap-select.min.css') }}">
+    <link rel="shortcut icon" href="images/icono.ico">
 
     <!-- Scripts -->
     <script>
@@ -55,18 +57,22 @@
                         @else
                             @if (auth()->user()->auth == true)
                                 <li><a href="requisicion-nueva">Solicitar Requisición</a></li>
-                                    @if (auth()->user()-> is_planeacion)
-                                        <li class="dropdown">
-                                            <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                                Proyectos <span class="caret"></span>
-                                            </a>
+                                <li class="dropdown">
+                                    <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                        Proyectos <span class="caret"></span>
+                                    </a>
 
-                                            <ul class="dropdown-menu" role="menu">
-                                                <li><a href="nuevoProyecto">Nuevo</a></li>
-                                                <li><a href="consultarProyecto">Consultar</a></li>
-                                            </ul>
-                                        </li>
-                                    @endif
+                                    <ul class="dropdown-menu" role="menu">
+                                        @if (auth()->user()-> is_planeacion)
+                                            <li><a href="nuevoProyecto">Nuevo</a></li>
+                                        @endif
+                                        @if (auth()->user()-> is_admin)
+                                            <li><a href="consultarProyecto">Consultar</a></li>
+                                        @else
+                                            <li><a href="revisarProyecto">Revisar</a></li>
+                                        @endif
+                                    </ul>
+                                </li>
                                     @if (auth()->user()-> is_admin)
                                         <li class="dropdown">
                                             <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -142,6 +148,7 @@
     <script src="{{ asset('js/jquery-3.2.0.min.js') }}"></script>
     <script src="{{ asset('js/jquery.js') }}"></script>
     <script src="{{ asset('js/activityEdition.js') }}"></script>
+    <script> src="{{ asset('js/bootstrap-select.js') }}"</script>
     @yield('scripts')
 </body>
 </html>

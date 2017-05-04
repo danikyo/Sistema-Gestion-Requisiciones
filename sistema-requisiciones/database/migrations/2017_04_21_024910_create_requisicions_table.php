@@ -18,6 +18,7 @@ class CreateRequisicionsTable extends Migration
             $table->date('date');
             $table->string('area');
             $table->string('observations');
+            $table->string('factura')->default('empty');
             $table->integer('secretario')->default(0);
             $table->integer('planeacion')->default(0);
             $table->integer('finanzas')->default(0);

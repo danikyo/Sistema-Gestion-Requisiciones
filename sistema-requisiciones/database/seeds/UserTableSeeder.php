@@ -35,6 +35,7 @@ class UserTableSeeder extends Seeder
             'email' => 'finanzas@gmail.com',
             'password' => bcrypt('123123'),
             'tel' => '3312345523',
+            'auth' => 1,
             'role' => 3
         ]);
 
@@ -43,6 +44,7 @@ class UserTableSeeder extends Seeder
             'email' => 'compras@gmail.com',
             'password' => bcrypt('123123'),
             'tel' => '3312345523',
+            'auth' => 1,
             'role' => 4
         ]);
 
@@ -51,6 +53,7 @@ class UserTableSeeder extends Seeder
             'email' => 'profesor@gmail.com',
             'password' => bcrypt('123123'),
             'tel' => '3310103412',
+            'auth' => 1,
             'role' => 5
         ]);
     }

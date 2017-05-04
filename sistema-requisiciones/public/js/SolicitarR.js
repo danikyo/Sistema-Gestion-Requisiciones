@@ -2,21 +2,35 @@ $(document).on('ready', mainFunction);
 
 function mainFunction()
 {
+	$productLength = $('#tableProductos tr').length-1;
+
+	if($productLength == 0)
+	{
+		$('#btnNewRequisicion').attr('disabled', 'disabled');
+	}
+
 	$('#proyecto').on('change', funcSelectProyecto);
 	$('#actividad').on('change', funcSelectActividad);
 	$('#recurso').on('change', funcSelectRecurso);
 	$('#producto').on('change', funcSelectProducto);
 	$('#btnAddProducto').on('click', funcAddProducto);
 }
-
+//NOTA, EN JAVASCRIPT NO FUNCIONA EL LENGUAJE BLADE DE LARAVEL, YA QUE ESE ES LENGUAJE PHP
 function funcSelectProyecto()
 {
 	$proyectoId = $(this).val();
+	$userId = $('#idUser').val();
 
-	$.get('/api/requisicion/' + $proyectoId + '/project', function(data) {
-		var html_select = '<option value="">Seleccione una Actividad</option>';
+	$.get('/api/requisicion/' + $proyectoId + '/' + $userId + '/project', function(data) {
+		var html_select = '<option value="">Actividades</option>';
+		html_select += '<option disabled>──────────</option>';
 		for (var i=0; i<data.length; ++i)
-			html_select += '<option value="'+data[i].id+'">'+data[i].description+'</option>';
+		{
+			if(data[i].project_id == $('#proyecto').val())
+			{
+				html_select += '<option value="'+data[i].id+'">'+data[i].description+'</option>';
+			}
+		}
 		$('#actividad').html(html_select);
 	});
 }
@@ -26,11 +40,14 @@ function funcSelectActividad()
 	$actividadId = $(this).val();
 
 	$.get('/api/requisicion/'+$actividadId+'/activity', function(data) {
-		var html_select = '<option value="">Seleccione un Recurso</option>';
+		var html_select = '<option value="">Recursos</option>';
+		html_select += '<option disabled>──────────</option>';
 		for (var i=0; i<data.length; ++i)
-			html_select += '<option value="'+data[i].id+'">'+data[i].type+'</option>';
+		    html_select += '<option value="'+data[i].id+'">'+data[i].type+'</option>';
 		$('#recurso').html(html_select);
 	});
+
+	$('#proyecto').attr('readonly', 'readonly');
 }
 
 function funcSelectRecurso()
@@ -38,11 +55,14 @@ function funcSelectRecurso()
 	$recursoId = $(this).val();
 
 	$.get('/api/requisicion/'+$recursoId+'/resource', function(data) {
-		var html_select = '<option value="">Seleccione un Producto</option>';
+		var html_select = '<option value="">Productos</option>';
+		html_select += '<option disabled>──────────</option>';
 		for (var i=0; i<data.length; ++i)
 			html_select += '<option value="'+data[i].id+'">'+data[i].name+'</option>';
 		$('#producto').html(html_select);
 	});
+
+	$('#actividad').attr('readonly', 'readonly');
 }
 
 function funcSelectProducto()
@@ -53,6 +73,8 @@ function funcSelectProducto()
 		var html_select = data[0].price;
 		$('#precio').val(data[0].price);
 	});
+
+	$('#recurso').attr('readonly', 'readonly');
 }
 
 function funcAddProducto()
@@ -90,16 +112,23 @@ function funcAddProducto()
 			)
 		)
 		.append
+		(
+			$('<td>').addClass('text-center')
+			.append
 			(
-				$('<td>').addClass('text-center')
+				$('<div>').attr('id', 'btnDelProducto').addClass('btn btn-danger del')
 				.append
 				(
-					$('<div>').attr('id', 'btnDelProducto').addClass('btn btn-danger del')
-					.append
-					(
-						$('<span>').addClass('glyphicon glyphicon-trash')
-					)
+					$('<span>').addClass('glyphicon glyphicon-trash')
 				)
 			)
+		)
 	)
+
+	$productLength++;
+
+	if($productLength != 0)
+	{
+		$('#btnNewRequisicion').removeAttr('disabled');
+	}
 }

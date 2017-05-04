@@ -111,20 +111,18 @@
 						<th class="text-center info">ID</th>
 						<th class="info">Nombre de Producto</th>
 						<th class="text-center info">Precio Unitario</th>
-						<th class="text-center info">Importe</th>
 					</tr>
 					@foreach($requisicion->products()->get() as $product)
 						<tr>
 							<td class="text-center"> {{$product->id}} </td>
 							<td class=""> {{ $product->name }} </td>
 							<td class="text-center"> $ {{ $product->price }} </td>
-							<td class="text-center"> $ {{ $total += $product->price  }} </td>
+							{{ $total += $product->price }}
 						</tr>
 					@endforeach
 					<tr>
 						<td class="text-center info">IVA% <br>16</td>
-						<td class="text-center info">IVA <br>${{$iva = $total*.16}}</td>
-						<td class="text-center info">NETO <br>${{$neto = $total-$iva}}</td>
+						<td class="text-center info">IVA &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp NETO <br>${{$iva = $total*.16}} &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp ${{$neto = $total-$iva}}</td>
 						<td class="text-center info">TOTAL <br>$ {{$total}}</td>
 					</tr>
 				</table>
@@ -152,8 +150,12 @@
 				@if ($requisicion->status == 2)
 					<h4 class="text-center"><strong>Requisición Ejercida</strong></h4>
 				@elseif ($requisicion->status == 1)
-					<form action="" role="form" method="POST">
+					<form action="" role="form" method="POST" enctype="multipart/form-data">
 					{{ csrf_field() }}
+						<div class="form-group">
+				        	<label for="factura">Subir Factura en PDF</label>
+				        	<input name="factura" type="file">
+		        		</div>
 				        <div class="form-group">
 							<div class="col-md-2 col-md-offset-4">
 								<select id="autorizar" name="autorizar" class="form-control">
@@ -161,7 +163,7 @@
 									<option value="2">Cancelar</option>
 								</select>
 							</div>
-				        
+
 				            <div class="col-md-3">
 				                <button id="btnAuth" class="btn btn-primary">Aceptar</button>
 				            </div>
@@ -228,6 +230,25 @@
 		            </div>
 		        </form>
 	        	@endif
+	        @endif
+
+	        @if ($requisicion->status == 2)
+	        	<form action="" role="form" method="POST">
+				{{ csrf_field() }}
+				<div class="form-group">
+						<div class="col-md-2 col-md-offset-4">
+							<input name="filename" type="text" value="{{$requisicion->factura}}" readonly style="visibility:hidden">
+						</div>
+						<div class="col-md-2 col-md-offset-4">
+							<input name="status" type="text" value="{{$requisicion->status}}" readonly style="visibility:hidden">
+						</div>
+			        
+			            <div class="col-md-3 col-md-offset-5">
+			                <button id="btnAuth" class="btn btn-default">Descargar Factura</button>
+			            </div>
+		            </div>
+		        </form>
+	        	<!--<a href="/download" class="btn btn-large pull-right"><i class="icon-download-alt"> </i> Descargar Reporte </a>-->
 	        @endif
 		</div>
 	</div>

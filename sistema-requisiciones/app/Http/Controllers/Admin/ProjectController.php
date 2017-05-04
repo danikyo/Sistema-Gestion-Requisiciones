@@ -7,7 +7,6 @@ use App\Resource;
 use App\User;
 use App\Product;
 
-
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -35,11 +34,33 @@ class ProjectController extends Controller
         return view('project.read')->with(compact('projects',$projects));
     }
 
+    public function review(Request $request)
+    {
+        $activityuser = User::find(auth()->user()->id)->activities()->paginate('10'); //busca actividades del usuario que esta logeado
+
+        $projects = Project::all();
+
+        return view('project.read2')->with(compact('projects', 'activityuser'));
+    }
+
     public function edit($id)
     {
         $project = Project::find($id);
         $activities = $project->activities()->get();
         return view('project.edit')->with(compact('project', 'activities'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $project = Project::find($id);
+        $current = $project->currentAmount;
+
+        $project->currentAmount = $request->input('currentAmount') + $current;
+        $project->endDate = $request->input('date');
+
+        $project->save();
+
+        return back()->with('notification', 'Proyecto Actualizado Satisfactoriamente!');
     }
 
     public function store(Request $request)
@@ -48,25 +69,45 @@ class ProjectController extends Controller
             'idca' => 'unique:projects,id',
         ];
 
-        foreach($request->get('idActivity') as $key => $val)
+        $messages = [
+            'idca.unique' => 'El ID elegido para el proyecto está en uso, intenta con otro distinto',
+        ];
+
+
+        foreach($request->get('idActivity') as $key => $val) //obtiene cada elemento de la tabla para evitar que se repitan datos registrados
         {
             $rules['idActivity.'.$key] = 'unique:activities,id';
         }
 
         foreach($request->get('resource-ID') as $key => $val)
         {
-            $rules['resource-ID'.$key] = 'unique:resources,id';
+            $rules['resource-ID.'.$key] = 'unique:resources,id';
         }
 
-        $this->validate($request, $rules);
+        $i = 0;
+        foreach($request->input('idActivity') as $key) //escribe mensajes para cada elemento de tabla que se repita
+        {
+            $messages['idActivity.'.$i.'.unique'] = 'El ID '.$key.' en actividades ya está en uso, intenta con otro distinto';
+            $i++;
+        }
+
+        $i = 0;
+        foreach($request->input('resource-ID') as $key)
+        {
+            $messages['resource-ID.'.$i.'.unique'] = 'El ID '.$key.' en recursos ya está en uso, intenta con otro distinto';
+            $i++;
+        }
+
+        $this->validate($request, $rules, $messages);
 
     	$project = new Project();
+        $project->startDate = $request->input('date1');
+        $project->endDate = $request->input('date2');
     	$project->id = $request->input('idca');
-    	$project->caname = $request->input('nameca');
     	$project->clave = $request->input('clave');
+        $project->caname = $request->input('nameca');
     	$project->name = $request->input('name');
-    	$project->startDate = $request->input('date1');
-    	$project->endDate = $request->input('date2');
+        $project->currentAmount = $request->input('currentAmount');
     	$project->description = $request->input('description');
 
         $total = 0;
@@ -76,7 +117,6 @@ class ProjectController extends Controller
             $total += $request->input('productPrice')[$i];
             $i++;
         }
-    	$project->currentAmount = $total;
         $project->Amount = $total;
     	$project->save();
 
@@ -127,7 +167,7 @@ class ProjectController extends Controller
 
             $i++;
         }
-
+        
     	return back()->with('notification', 'Proyecto Registrado Satisfactoriamente!');
     }
 

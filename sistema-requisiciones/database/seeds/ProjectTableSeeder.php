@@ -17,25 +17,25 @@ class ProjectTableSeeder extends Seeder
     {
         Project::create([
         	'id' => 100,
-        	'caname' => 'Los chidos',
-        	'clave'  => '1090', 
-        	'name' => 'PC',
+        	'caname' => 'Desarrolladores informáticos',
+        	'clave'  => 'AG500', 
+        	'name' => 'Aparatos Electrónicos',
         	'startDate' => "2017-12-01",
         	'endDate' => "2018-12-01", 
-        	'description' => 'Las descripciones pueden no tener sentido', 
-            'Amount' => '150',
-        	'currentAmount' => '150'
+        	'description' => 'Las descripciones pueden no tener sentido, pero igual dejo una descripción', 
+            'Amount' => '200',
+        	'currentAmount' => '200'
         ]);
 
         Activity::create([
         	'id' => 1,
-        	'description' => 'actividad uno',
+        	'description' => 'Construir Computadaoras',
         	'project_id' => 100
         ]);
 
         Activity::create([
         	'id' => 50,
-        	'description' => 'actividad dos',
+        	'description' => 'Construir Móbiles',
         	'project_id' => 100
         ]);
 
@@ -53,14 +53,14 @@ class ProjectTableSeeder extends Seeder
 
         Resource::create([
         	'id' => 10,
-        	'type' => 'HP',
+        	'type' => 'Samsung',
         	'activity_id' => 50
         ]);
 
         Product::create([
         	'name' => 'Pantallas',
         	'price' => 100,
-        	'resource_id' => 2
+        	'resource_id' => 2,
         ]);
 
         Product::create([
@@ -69,6 +69,18 @@ class ProjectTableSeeder extends Seeder
         	'resource_id' => 2
         ]);
 
-        Activity::find(1)->users()->attach(2);
+        Product::create([
+            'name' => 'Teclado',
+            'price' => 50,
+            'resource_id' => 3
+        ]);
+
+        Product::create([
+            'name' => 'Celular',
+            'price' => 50,
+            'resource_id' => 10
+        ]);
+
+        Activity::find(1)->users()->attach(5);
     }
 }

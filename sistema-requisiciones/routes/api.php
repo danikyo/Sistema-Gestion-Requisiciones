@@ -19,7 +19,7 @@ use Illuminate\Http\Request;
 
 Route::get('/project/{id}/user', 'Admin\ProjectController@byUser');
 
-Route::get('/requisicion/{id}/project', 'Admin\RequisicionController@byProject');
+Route::get('/requisicion/{id}/{user}/project', 'Admin\RequisicionController@byProject');
 Route::get('/requisicion/{id}/activity', 'Admin\RequisicionController@byActivity');
 Route::get('/requisicion/{id}/resource', 'Admin\RequisicionController@byResource');
 Route::get('/requisicion/{id}/product', 'Admin\RequisicionController@byProduct');

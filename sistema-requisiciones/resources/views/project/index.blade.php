@@ -1,13 +1,15 @@
 @extends('layouts.app')
 
-<head><link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet"></head>
+<head>
+<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+</head>
 
 @section('content')
 <div class="container">
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-heading">Nuevo Proyecto</div>
+                <div class="panel-heading">Registrar Nuevo Proyecto</div>
 
                 <div class="panel-body">
 
@@ -31,7 +33,7 @@
                         {{ csrf_field() }}
 
                         <div class="form-group">
-                            <label for="date1" class="col-md-4 control-label">Fecha Inicio</label>
+                            <label for="date1" class="col-md-2 control-label">Inicia en</label>
 
                             <div class="col-sm-3">
                                 <input id="date1" type="date" class="form-control" name="date1" value="{{ old('date1') }}" required autofocus>
@@ -39,7 +41,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="date2" class="col-md-4 control-label">Fecha Final</label>
+                            <label for="date2" class="col-md-2 control-label">Se vence en</label>
 
                             <div class="col-sm-3">
                                 <input id="date2" type="date" class="form-control" name="date2" value="{{ old('date2') }}" required autofocus>
@@ -47,42 +49,50 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="idca" class="col-md-4 control-label">IDCA</label>
+                            <label for="idca" class="col-md-4 control-label sr-only">IDCA</label>
 
-                            <div class="col-md-3">
-                                <input id="idca" type="number" class="form-control" name="idca" value="{{ old('idca') }}" required autofocus>
+                            <div class="col-md-10">
+                                <input id="idca" type="number" class="form-control" name="idca" value="{{ old('idca') }}" placeholder="Colócale un ID al proyecto (IDCA)" required autofocus>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="clave" class="col-md-4 control-label">CLAVE</label>
+                            <label for="clave" class="col-md-4 control-label sr-only">CLAVE</label>
 
-                            <div class="col-md-3">
-                                <input id="clave" type="text" class="form-control" name="clave" value="{{ old('clave') }}" required autofocus>
+                            <div class="col-md-10">
+                                <input id="clave" type="text" class="form-control" name="clave" value="{{ old('clave') }}" placeholder="Escribe una CLAVE para el proyecto" required autofocus>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="nameca" class="col-md-4 control-label">Nombre del Cuerpo Académico</label>
+                            <label for="nameca" class="col-md-4 control-label sr-only">Nombre del Cuerpo Académico</label>
 
-                            <div class="col-md-6">
-                                <input id="nameca" type="text" class="form-control" name="nameca" value="{{ old('nameca') }}" required autofocus>
+                            <div class="col-md-10">
+                                <input id="nameca" type="text" class="form-control" name="nameca" value="{{ old('nameca') }}" placeholder="¿Cuál es el nombre del cuerpo académico?" required autofocus>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="name" class="col-md-4 control-label">Nombre del Proyecto</label>
+                            <label for="name" class="col-md-4 control-label sr-only">Nombre del Proyecto</label>
 
-                            <div class="col-md-6">
-                                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
+                            <div class="col-md-10">
+                                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="Escribe un nombre para el proyecto" required autofocus>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="description" class="col-md-4 control-label">Descripción</label>
+                            <label for="currentAmount" class="col-md-4 control-label sr-only">Saldo Actual</label>
 
-                            <div class="col-md-6">
-                                <textarea id="description" class="form-control" name="description" value="{{ old('description') }}" required autofocus style="resize:none"></textarea>
+                            <div class="col-md-10">
+                                <input id="currentAmount" type="number" step=any class="form-control" name="currentAmount" value="{{ old('currentAmount') }}" placeholder="¿Cuál es el monto inicial del proyecto?" required autofocus>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description" class="col-md-4 control-label sr-only">Descripción</label>
+
+                            <div class="col-md-10">
+                                <textarea id="description" class="form-control" name="description" value="{{ old('description') }}" placeholder="Anota la descripción del proyecto aquí" required autofocus style="resize:none"></textarea>
                             </div>
                         </div>
                         <hr>
@@ -91,13 +101,17 @@
                             <br><br>
                             <div class="col-md-12 table-responsive">
                                 <div class="form-group col-md-12">
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <label for="inputActivity" class="sr-only">Escribe el ID de la actividad</label>
-                                        <input id="inputActivity" type="number" step=any class="form-control" autofocus placeholder="Escribe el ID de la actividad">
+                                        <input id="inputActivity" type="number" step=any class="form-control" autofocus placeholder="ID de actividad">
                                     </div>
-                                    
-                                    <div id="btnNewActivity" class="btn btn-success btn-sm">Agregar</div>
-                                    <div id="btnDelActivity" class="btn btn-danger btn-sm">Eliminar</div>
+                                    <div class="col-md-3">
+                                        <label for="inputActivityName" class="sr-only">Escribe la descripción de la actividad</label>
+                                        <input id="inputActivityName" type="text" class="form-control" autofocus placeholder="Descripción de la actividad">
+                                    </div>
+                                
+                                    <div id="btnNewActivity" class="btn btn-default btn-sm">Agregar Actividad</div>
+                                    <div id="btnDelActivity" class="btn btn-default btn-sm">Remover</div>
                                 </div>
                                 
                                 <table  id="activityTable" class="table table-bordered table-hover">
@@ -113,34 +127,30 @@
                         <!--Recursos-->
                         <div class="form-group">
                             <br><br>
-                            <div class="form-group col-md-12">
-                                <div class="col-md-3">
-                                    <label for="inputResource" class="sr-only">Escribe el ID del Recurso</label>
-                                    <input id="inputResource" type="number" step=any class="form-control" autofocus placeholder="Escribe el ID del recurso">
-                                </div>
-
-                            </div>
                             <div class="col-md-12 table-responsive">
-
                                 <div class="form-group col-md-12">
-                                    <label for="select_idActivity" class="label-control col-md-3">Elije actividad para recurso</label>
-
                                     <div class="col-md-2">
-                                       <select id="selectActivity" class="form-control">
-                                       </select>
+                                        <label for="inputResourceId" class="sr-only">ID del Recurso</label>
+                                        <input id="inputResourceId" type="number" step=any class="form-control" autofocus placeholder="ID del recurso">
                                     </div>
-                                    
                                     <div class="col-md-3">
-                                        <div id="btnNewResource" class="btn btn-primary btn-sm">Agregar</div>
-                                        <div id="btnDelResource" class="btn btn-danger btn-sm">Eliminar</div>
-                                    </div> 
+                                        <label for="inputResourceType" class="sr-only">Tipo de Recurso</label>
+                                        <input id="inputResourceType" class="form-control" autofocus placeholder="Tipo de recurso">
+                                    </div>
+                                    <div class="col-md-3">
+                                       <select id="selectActivity" class="selectpicker" title="Actividades">
+                                       </select>
+                                    </div>      
+
+                                        <div id="btnNewResource" class="btn btn-default btn-sm">Agregar Recurso</div>
+                                        <div id="btnDelResource" class="btn btn-default btn-sm">Remover</div>
                                 </div>
-                                
                                 <table  id="resourceTable" class="table table-bordered table-hover">
                                     <tr>
                                         <th>ID Recurso</th>
-                                        <th>ID Actividad</th>
                                         <th>Tipo de Recurso</th>
+                                        <th>ID Actividad</th>
+                                        <th>Actividad</th>
                                     </tr>
                                 </table>
                             </div>
@@ -149,25 +159,23 @@
                         <hr>
                         <!--Productos-->
                         <div class="form-group">
-                            <br><br>
                             <div class="col-md-12 table-responsive">
                                 <br><br>
                                 <div class="form-group col-md-12">
-                                    <label for="selectResource" class="label-control col-md-3">Elije recurso para producto</label>
-                                    <div class="col-md-2">
-                                       <select id="selectResource" class="form-control">
+                                    <div class="col-md-3">
+                                       <select id="selectResource" class="selectpicker" title="Recursos">
                                        </select>
                                     </div>
-
-                                    <div id="btnNewProduct" class="btn btn-primary btn-sm">Agregar</div>
-                                    <div id="btnDelProduct" class="btn btn-danger btn-sm">Eliminar</div>
+                                        <div id="btnNewProduct" class="btn btn-default btn-sm">Agregar Producto</div>
+                                        <div id="btnDelProduct" class="btn btn-default btn-sm">Remover</div>
                                 </div>
 
                                 <table  id="productTable" class="table table-bordered table-hover">
                                     <tr>
-                                        <th>ID Recurso</th>
-                                        <th width=700>Nombre de Producto</th>
+                                        <th>Nombre de Producto</th>
                                         <th>Precio</th>
+                                        <th>ID Recurso</th>
+                                        <th>Recurso</th>
                                     </tr>
                                 </table>
                             </div>
@@ -177,23 +185,27 @@
                         <!--Usuarios-->
                         <div class="form-group">
                             <br><br>
-                            <div class="form-group col-md-10">
-                                <label for="user-id" class="control-label col-md-2">ID usuario</label>
+                            <div class="form-group col-md-12">
                                 <div class="col-md-3">
-                                   <input id="user-id" type="text" name="user-id" value="{{ old('user-id') }}" autofocus class="form-control">
+                                   <select id="selectActivity2" class="selectpicker" title="Actividades">
+                                   </select>
+                                </div>                    
+                                <div class="col-md-3">
+                                    <select name="user" id="user" class="selectpicker" title="Usuarios">
+                                        @foreach ($users as $user)
+                                            <option value="{{$user->id}}">{{$user->name}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
-
-                                <div class="col-md-1">
-                                    <div id="btnNewUser" class="btn btn-primary" title="Agregar"><span class="glyphicon glyphicon-plus-sign"></span></div>
-                                </div>
-                                
+                                <div id="btnNewUser" class="btn btn-default btn-sm">Agregar Usuario</div> 
                             </div>
                             <div class="col-md-12 table-responsive">
                                 <table  id="userTable" class="table table-bordered table-hover">
                                     <tr>
-                                        <th width="100">ID Actividad</th>
-                                        <th width="100">ID de Usuario</th>
+                                        <th>ID de Usuario</th>
                                         <th>Nombre</th>
+                                        <th>ID Actividad</th>
+                                        <th>Actividad</th>
                                         <th>Opción</th>
                                     </tr>
                                 </table>
@@ -213,4 +225,8 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section ('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
 @endsection

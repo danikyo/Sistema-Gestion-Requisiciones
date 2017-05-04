@@ -42,11 +42,7 @@
 							{{ $project->endDate }}
 						</td>
 						<td>
-							@if ($project->currentAmount != 0)
-								<label class="label-control">Proyecto en curso</label>
-							@else
-								<label class="label-control" style="color:green">Proyecto Ejercido</label>
-							@endif
+							<label class="label-control">Proyecto en curso</label>
 						</td>
 						<td class="text-center">
 							<a href="proyecto={{ $project->id }}" class="btn btn-success"><span title="Editar" class="glyphicon glyphicon-pencil"></span></div>

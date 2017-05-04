@@ -10,6 +10,12 @@
 					<br><br>
 				</div>
 
+				@if (session('notification'))
+                    <div class="alert alert-success">
+                        {{ session('notification') }}
+                    </div>
+                @endif
+
 				<div class="row text-center">
 					<strong style="font-size: 3vh">Dictamen Aprobado</strong>
 				</div>
@@ -45,7 +51,7 @@
 					</div>
 				</div>
 
-				<div class="row">
+				<div class="row container">
 					<div class="panel panel-default">
 						<div class="panel-body">
 							<h3 class="text-center"> {{$project->description}} </h3>
@@ -100,7 +106,13 @@
 												<table class="table table-bordered">
 													@foreach($r->products()->get() as $p)
 													<tr>
-														<td>{{ $p->name }}</td>
+														@if ($p->exercised == 1)
+															<td class="warning">{{ $p->name }}</td>
+														@elseif ($p->exercised == 2)
+															<td class="danger">{{ $p->name }}</td>
+														@else
+															<td>{{ $p->name }}</td>
+														@endif
 													</tr>
 													@endforeach
 												</table>
@@ -109,7 +121,13 @@
 												<table class="table table-bordered">
 													@foreach($r->products()->get() as $p)
 													<tr>
-														<td>${{ $p->price }}</td>
+														@if ($p->exercised == 1)
+															<td class="warning">${{ $p->price }}</td>
+														@elseif ($p->exercised == 2)
+															<td class="danger">${{ $p->price }}</td>
+														@else
+															<td>${{ $p->price }}</td>
+														@endif
 													</tr>
 													@endforeach
 												</table>
@@ -132,16 +150,35 @@
 								<th class="text-center" width="200">Monto Total Aprobado al Cuerpo Académico</th>
 								<td class="text-center" style="font-size: 3vh"> ${{$project->Amount}} </td>
 							</tr>
-							@if ($project->currentAmount != 0)
-								<tr>
-									<th class="text-center" width="200">Monto Total Disponible</th>
-									<td class="text-center" style="font-size: 3vh"> ${{$project->currentAmount}} </td>
-								</tr>
-							@else
-								<tr class="text-center">
-									<th class="text-center" width="200">Status</th>
-									<td class="text-center" width="200">Proyecto Ejercido</td>
-								</tr>
+							<tr>
+								<th class="text-center" width="200">Monto Total Disponible</th>
+								<td class="text-center" style="font-size: 3vh"> ${{$project->currentAmount}} </td>
+							</tr>
+						</table>
+							@if (auth()->user()->is_planeacion)
+								<form action="" role="form" method="POST">
+									{{ csrf_field() }}
+									<div class="form-gruop row">
+										<label for="currentAmount" class="col-md-3 col-md-offset-2">Saldo Actual</label>
+										<div class="col-md-4">
+											<input name="currentAmount" type="number" step=any class="form-control" required>
+										</div>
+									</div>
+
+									<div class="form-gruop row">
+										<label for="date" class="col-md-4 col-md-offset-1">Fecha de Vigencia</label>
+										<div class="col-md-4">
+											<input name="date" type="date" class="form-control" value="{{$project->endDate}}" required>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<br>
+			                            <div class="col-md-3 col-md-offset-4">
+			                                <button id="btnNewProject" class="btn btn-default">Guardar Cambios</button>
+			                            </div>
+			                        </div>
+								</form>
 							@endif
 						</table>
 					</div>
