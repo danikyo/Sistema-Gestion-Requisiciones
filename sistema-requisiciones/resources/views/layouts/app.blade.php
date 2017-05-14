@@ -148,7 +148,7 @@
     <script src="{{ asset('js/jquery-3.2.0.min.js') }}"></script>
     <script src="{{ asset('js/jquery.js') }}"></script>
     <script src="{{ asset('js/activityEdition.js') }}"></script>
-    <script> src="{{ asset('js/bootstrap-select.js') }}"</script>
+    <script src="{{ asset('js/bootstrap-select.js') }}"></script>
     @yield('scripts')
 </body>
 </html>

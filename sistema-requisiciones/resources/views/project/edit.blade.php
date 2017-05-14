@@ -6,7 +6,7 @@
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<div class="row">
-					<img src="/images/headerProject.png" class="img-responsive center-block" alt="Imagen responsive">
+					<img src="/images/headerProject.PNG" class="img-responsive center-block" alt="Imagen responsive">
 					<br><br>
 				</div>
 
@@ -28,16 +28,16 @@
 								<td >Universidad Politénica de la Zona Metropolitana de Guadalajara</td>
 							</tr>
 							<tr>
-								<th class="text-center" width="200">Nombre del Cuerpo Académico</th>
-								<td>{{$project->caname}}</td>
-							</tr>
-							<tr>
-								<th class="text-center" width="200">IDCA</th>
+								<th class="text-center" width="200">CLAVE</th>
 								<td> {{$project->id}} </td>
 							</tr>
 							<tr>
-								<th class="text-center" width="200">CLAVE</th>
-								<td> {{$project->clave}} </td>
+								<th class="text-center" width="200">IDCA</th>
+								<td> {{$project->idca}} </td>
+							</tr>
+							<tr>
+								<th class="text-center" width="200">Nombre del Cuerpo Académico</th>
+								<td>{{$project->caname}}</td>
 							</tr>
 							<tr>
 								<th class="text-center" width="200">Nombre del Proyecto</th>
@@ -186,7 +186,7 @@
 
 				<div class="row">
 					<div class="row">			
-						<img src="/images/footerProject.png" class="img-responsive center-block" alt="Imagen responsive">
+						<img src="/images/footerProject.PNG" class="img-responsive center-block" alt="Imagen responsive">
 					</div>
 				</div>
 			</div>

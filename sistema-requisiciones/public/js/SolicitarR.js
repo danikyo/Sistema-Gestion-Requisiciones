@@ -47,7 +47,7 @@ function funcSelectActividad()
 		$('#recurso').html(html_select);
 	});
 
-	$('#proyecto').attr('readonly', 'readonly');
+	$('#proyecto option:not(:selected)').attr('disabled', 'disabled');
 }
 
 function funcSelectRecurso()
@@ -62,7 +62,7 @@ function funcSelectRecurso()
 		$('#producto').html(html_select);
 	});
 
-	$('#actividad').attr('readonly', 'readonly');
+	$('#actividad option:not(:selected)').attr('disabled', 'disabled');
 }
 
 function funcSelectProducto()
@@ -74,7 +74,7 @@ function funcSelectProducto()
 		$('#precio').val(data[0].price);
 	});
 
-	$('#recurso').attr('readonly', 'readonly');
+	$('#recurso option:not(:selected)').attr('disabled', 'disabled');
 }
 
 function funcAddProducto()

@@ -28,8 +28,19 @@ function funcNewActivity()
 	$inputActivity = $('#inputActivity').val();
 	$inputActivityName = $('#inputActivityName').val();
 
+	$('#activityTable > tbody  > tr.item').each(function() {
+		//var dato = $(this).find('td:first').html();
+		var dato = $(this).find('#idActivity').html();
+		alert(dato);
+	});
+	/*$("tr.item").each(function() {
+	  $this = $(this)
+	  var value = $this.find("span.value").html();
+	  var quantity = $this.find("input.quantity").val();
+	});*/
+
 	if ($inputActivity != '' && $inputActivityName != '')
-	{
+	{	
 		$("#activityTable")
 		.append
 		(
@@ -277,8 +288,10 @@ function funcDelActivity()
     {
 	    table.deleteRow(rowCount -1); //elimina el ultimo elemento de la tabla
 	    $("select[id=selectActivity] option:last").remove(); //elimina el último select
+	    $("select[id=selectActivity2] option:last").remove();
 	}
 
+	$('.selectpicker').selectpicker('refresh');
 	$('.selectpicker').selectpicker('refresh');
 
 	$activityLength--;

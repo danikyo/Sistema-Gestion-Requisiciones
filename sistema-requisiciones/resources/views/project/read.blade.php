@@ -20,7 +20,7 @@
 			<div class="col-md-12">
 				<table id="activityTable" class="table .table-striped">
 					<tr>
-						<th>IDCA</th>
+						<th>CLAVE</th>
 						<th>Nombre de Proyecto</th>
 						<th>Monto Aprobado</th>
 						<th>Fecha Vigencia</th>

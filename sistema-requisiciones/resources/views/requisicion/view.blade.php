@@ -109,21 +109,21 @@
 				<table class="table table-bordered">
 					<tr>
 						<th class="text-center info">ID</th>
-						<th class="info">Nombre de Producto</th>
+						<th class="text-center info">Nombre de Producto</th>
 						<th class="text-center info">Precio Unitario</th>
 					</tr>
 					@foreach($requisicion->products()->get() as $product)
 						<tr>
 							<td class="text-center"> {{$product->id}} </td>
-							<td class=""> {{ $product->name }} </td>
+							<td class="text-center"> {{ $product->name }} </td>
 							<td class="text-center"> $ {{ $product->price }} </td>
-							{{ $total += $product->price }}
+							<label for="" class="sr-only">{{ $total += $product->price }}</label>
 						</tr>
 					@endforeach
 					<tr>
-						<td class="text-center info">IVA% <br>16</td>
-						<td class="text-center info">IVA &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp NETO <br>${{$iva = $total*.16}} &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp ${{$neto = $total-$iva}}</td>
-						<td class="text-center info">TOTAL <br>$ {{$total}}</td>
+						<td class="text-center info"><strong>IVA% <br>16</td></strong>
+						<td class="text-center info"><strong>IVA &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp NETO <br>${{$iva = $total*.16}} &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp ${{$neto = $total-$iva}}</strong></td>
+						<td class="text-center info"><strong>TOTAL <br>$ {{$total}}</td></strong>
 					</tr>
 				</table>
 			</div>

@@ -17,6 +17,10 @@
                         <div class="alert alert-success">
                             {{ session('notification') }}
                         </div>
+                    @elseif (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
                     @endif
 
                     @if (count($errors) > 0)
@@ -49,18 +53,18 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="idca" class="col-md-4 control-label sr-only">IDCA</label>
+                            <label for="idca" class="col-md-4 control-label sr-only">CLAVE</label>
 
                             <div class="col-md-10">
-                                <input id="idca" type="number" class="form-control" name="idca" value="{{ old('idca') }}" placeholder="Colócale un ID al proyecto (IDCA)" required autofocus>
+                                <input id="id" type="number" class="form-control" name="idca" value="{{ old('id') }}" placeholder="Colócale un ID al proyecto (CLAVE)" required autofocus>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="clave" class="col-md-4 control-label sr-only">CLAVE</label>
+                            <label for="clave" class="col-md-4 control-label sr-only">IDCA</label>
 
                             <div class="col-md-10">
-                                <input id="clave" type="text" class="form-control" name="clave" value="{{ old('clave') }}" placeholder="Escribe una CLAVE para el proyecto" required autofocus>
+                                <input id="clave" type="text" class="form-control" name="clave" value="{{ old('idca') }}" placeholder="Escribe el ID del cuerpo académico" required autofocus>
                             </div>
                         </div>
 

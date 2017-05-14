@@ -17,14 +17,14 @@ class ProjectTableSeeder extends Seeder
     {
         Project::create([
         	'id' => 100,
-        	'caname' => 'Desarrolladores informáticos',
-        	'clave'  => 'AG500', 
+            'idca'  => 'AG500',
+        	'caname' => 'Desarrolladores informáticos', 
         	'name' => 'Aparatos Electrónicos',
         	'startDate' => "2017-12-01",
         	'endDate' => "2018-12-01", 
         	'description' => 'Las descripciones pueden no tener sentido, pero igual dejo una descripción', 
             'Amount' => '200',
-        	'currentAmount' => '200'
+        	'currentAmount' => '100'
         ]);
 
         Activity::create([

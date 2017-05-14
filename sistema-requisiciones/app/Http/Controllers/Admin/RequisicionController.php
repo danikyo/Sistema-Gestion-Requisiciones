@@ -1,5 +1,7 @@
 <?php
 
+//DEBO HACER UNA NOTA AQUÍ, AL QUERER LLAMAR A UNA FUNCIÓN DENTRO DE OTRA FUNCIÓN SE DEBE HACER FUERA DE LA CLASE, EN CASO DE QUE SE QUIERA DENTRO DE LA CLASE SE DEBERÁ ADJUNGAR EL NAMESPACE EN ESTE CASO ES EL NOMBRE DE LA CLASE Y QUEDARÍA ALGO ASÍ CUANDO SE LLAME A LA FUNCIÓN       RequisicionController::funcion()
+
 namespace App\Http\Controllers\Admin;
 
 use App\Requisicion;
@@ -106,74 +108,52 @@ class RequisicionController extends Controller
 
     public function store(Request $request)
     {
-        //verificar Monto disponible
-        $Proy = Project::find($request->input('proyecto'));
-        $Req = Requisicion::where('project_id', $Proy->id);
-        $total = 0;
-
-        foreach($Req->get() as $req)
+        if (repeat($request)) //¿Se Repite algún producto?
         {
-            $Pro = $req->products()->get();
-            foreach($Pro as $pro)
-            {
-                if ($pro->exercised == 1)
-                    $total += $pro->price;
-            }
-        }
-
-        foreach($request->input('idProducto') as $producto)
-        {
-            $product = Product::find($producto);
-            $total += $product->price;
-        }
-
-
-        if ($Proy->currentAmount < $total)
-        {
-            return back()->with('error', 'No hay fondos disponibles');
+            return back()->with('error', 'No puedes pedir más de un mismo producto');
         }
         else
         {
-            //Enviar Solicitud
-            $flag = false;
-            $activityuser = User::find(auth()->user()->id)->activities()->get();
-            foreach($activityuser as $activity)
+            if (!availableAmount($request)) //¿Queda Monto disponible?
             {
-                if($activity->id == $request->input('actividad'))
-                    $flag = true;
-            }
-
-            if($flag == true)
-            {
-                $requisicion = new Requisicion();
-
-                $requisicion->date = $request->input('fecha');
-                $requisicion->area = $request->input('area');
-                $requisicion->observations = $request->input('observaciones');
-
-                $requisicion->user_id = auth()->user()->id;
-                $requisicion->project_id = $request->input('proyecto');
-                $requisicion->activity_id = $request->input('actividad');
-                $requisicion->resource_id = $request->input('recurso'); 
-
-                $requisicion->save();
-
-                foreach($request->input('idProducto') as $producto)
-                {
-                    $product = Product::find($producto);
-                    $product->exercised = 1;
-                    $product->save();
-                    $requisicionLast = Requisicion::all()->last()->id;
-                    Requisicion::find($requisicionLast)->products()->attach($product);
-                }
-
-                return back()->with('notification', 'Solicitud Enviada');
+                return back()->with('error', 'No hay fondos suficientes para realizar la solicitud');
             }
             else
             {
-                return back()->with('error', 'Error, no tienes permiso para la actividad seleccionada');
-            }
-        }    
+                if(ActivityPermission($request)) //¿Este usuario tiene permiso para la actividad?
+                {
+                    //Enviando solicitud...
+                    $requisicion = new Requisicion();
+
+                    $requisicion->date = $request->input('fecha');
+                    $requisicion->area = $request->input('area');
+                    $requisicion->observations = $request->input('observaciones');
+
+                    $requisicion->user_id = auth()->user()->id;
+                    $requisicion->project_id = $request->input('proyecto');
+                    $requisicion->activity_id = $request->input('actividad');
+                    $requisicion->resource_id = $request->input('recurso'); 
+
+                    $requisicion->save();
+
+                    foreach($request->input('idProducto') as $producto)
+                    {
+                        $product = Product::find($producto);
+                        $product->exercised = 1;
+                        $product->save();
+                        $requisicionLast = Requisicion::all()->last()->id;
+                        Requisicion::find($requisicionLast)->products()->attach($product);
+                    }
+
+                    return back()->with('notification', 'Solicitud Enviada');
+                }
+                else
+                {
+                    return back()->with('error', 'Error, no tienes permiso para la actividad seleccionada');
+                }
+            }    
+        }
+        
     }
 
     public function update()
@@ -335,4 +315,74 @@ class RequisicionController extends Controller
     {
         return Product::where('id', $id)->get();
     }
+}
+
+//función que sirve para identificar si se repite algún elemento de la lista (en este caso, para que no se repitan productos)
+function repeat($request)
+{
+    $double = 0;
+    $i = 0;
+    foreach($request->input('idProducto') as $producto)
+    {
+        $a = 0;
+        foreach($request->input('idProducto') as $producto2)
+        {
+            if ($i != $a)
+            {
+                if ($producto == $producto2)
+                {
+                    $double = 1;
+                }
+            }
+            
+            $a++;                
+        }
+        $i++;
+    }
+
+    return $double;
+}
+
+function availableAmount($request) //función que comprueba si aún quedan fondos disponibles para completar la requisición
+{
+    $flag = true;
+    $Proy = Project::find($request->input('proyecto'));
+    $Req = Requisicion::where('project_id', $Proy->id);
+    $total = 0;
+
+    foreach($Req->get() as $req)
+    {
+        $Pro = $req->products()->get();
+        foreach($Pro as $pro)
+        {
+            if ($pro->exercised == 1)
+                $total += $pro->price;
+        }
+    }
+
+    foreach($request->input('idProducto') as $producto)
+    {
+        $product = Product::find($producto);
+        $total += $product->price;
+    }
+
+    if ($Proy->currentAmount < $total)
+    {
+        $flag = false;
+    }
+
+    return $flag;
+}
+
+function ActivityPermission($request) //función que valida si el usuario pertenece a la actividad seleccionada
+{
+    $flag = false;
+    $activityuser = User::find(auth()->user()->id)->activities()->get();
+    foreach($activityuser as $activity)
+    {
+        if($activity->id == $request->input('actividad'))
+            $flag = true;
+    }
+
+    return $flag;
 }

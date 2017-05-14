@@ -100,79 +100,175 @@ class ProjectController extends Controller
 
         $this->validate($request, $rules, $messages);
 
-    	$project = new Project();
-        $project->startDate = $request->input('date1');
-        $project->endDate = $request->input('date2');
-    	$project->id = $request->input('idca');
-    	$project->clave = $request->input('clave');
-        $project->caname = $request->input('nameca');
-    	$project->name = $request->input('name');
-        $project->currentAmount = $request->input('currentAmount');
-    	$project->description = $request->input('description');
-
-        $total = 0;
-        $i = 0;
-        foreach($request->input('product-IDresource') as $p)
+        if(repeatActivity($request) || repeatResource($request) || repeatUserActivity($request))
         {
-            $total += $request->input('productPrice')[$i];
-            $i++;
+            if(repeatActivity($request))
+            {
+                return back()->with('error', 'No puedes repetir el ID de las actividades en la lista');
+            }
+            else if(repeatResource($request))
+            {
+                return back()->with('error', 'No puedes repetir el ID de los recursos en la lista');
+            }
+            else
+            {
+                return back()->with('error', 'No puedes repetir usuarios en la misma actividad');
+            }
         }
-        $project->Amount = $total;
-    	$project->save();
-
-        $i = 0;
-        foreach($request->input('activityDescription') as $d)
+        else
         {
-            $activity = new Activity();
-            $activity->id = $request->input('idActivity')[$i];
-            $activity->description = $d;
+            $project = new Project();
+            $project->startDate = $request->input('date1');
+            $project->endDate = $request->input('date2');
+            $project->id = $request->input('id');
+            $project->idca = $request->input('idca');
+            $project->caname = $request->input('nameca');
+            $project->name = $request->input('name');
+            $project->currentAmount = $request->input('currentAmount');
+            $project->description = $request->input('description');
 
-            $projectA = Project::find($project->id);
-            $projectA->activities()->save($activity);
-            $i++;
-        }
+            $total = 0;
+            $i = 0;
+            foreach($request->input('product-IDresource') as $p)
+            {
+                $total += $request->input('productPrice')[$i];
+                $i++;
+            }
+            $project->Amount = $total;
+            $project->save();
 
-        $i = 0;
-        foreach($request->input('resource-IDactivity') as $r)
-        {
-            $resource = new Resource();
-            $resource->id = $request->input('resource-ID')[$i];
-            $resource->type = $request->input('resourceType')[$i];
+            $i = 0;
+            foreach($request->input('activityDescription') as $d)
+            {
+                $activity = new Activity();
+                $activity->id = $request->input('idActivity')[$i];
+                $activity->description = $d;
 
-            $activity = Activity::find($request->input('resource-IDactivity')[$i]);
-            $activity->resources()->save($resource);
+                $projectA = Project::find($project->id);
+                $projectA->activities()->save($activity);
+                $i++;
+            }
 
-            $i++;
-        }
+            $i = 0;
+            foreach($request->input('resource-IDactivity') as $r)
+            {
+                $resource = new Resource();
+                $resource->id = $request->input('resource-ID')[$i];
+                $resource->type = $request->input('resourceType')[$i];
 
-        $i = 0;
-        foreach($request->input('product-IDresource') as $p)
-        {
-            $product = new Product();
-            $product->name = $request->input('productName')[$i];
-            $product->price = $request->input('productPrice')[$i];
+                $activity = Activity::find($request->input('resource-IDactivity')[$i]);
+                $activity->resources()->save($resource);
 
-            $resource = Resource::find($request->input('product-IDresource')[$i]);
-            $resource->products()->save($product);
+                $i++;
+            }
 
-            $i++;
-        }
+            $i = 0;
+            foreach($request->input('product-IDresource') as $p)
+            {
+                $product = new Product();
+                $product->name = $request->input('productName')[$i];
+                $product->price = $request->input('productPrice')[$i];
 
-        $i = 0;
-        foreach($request->input('id-user') as $ua)
-        {
-            $user = User::find($ua);
-            $activityFind = $request->input('user-IDactivity')[$i];
-            Activity::find($activityFind)->users()->attach($user);
+                $resource = Resource::find($request->input('product-IDresource')[$i]);
+                $resource->products()->save($product);
 
-            $i++;
-        }
-        
-    	return back()->with('notification', 'Proyecto Registrado Satisfactoriamente!');
+                $i++;
+            }
+
+            $i = 0;
+            foreach($request->input('id-user') as $ua)
+            {
+                $user = User::find($ua);
+                $activityFind = $request->input('user-IDactivity')[$i];
+                Activity::find($activityFind)->users()->attach($user);
+
+                $i++;
+            }
+            
+            return back()->with('notification', 'Proyecto Registrado Satisfactoriamente!');
+        }	
     }
 
     public function byUser($data)
     {
         return User::where('id', $data)->get();
     }
+}
+
+//función que sirve para identificar si se repite algún elemento de la lista
+function repeatActivity($request)
+{
+    $double = false;
+    $i = 0;
+    foreach($request->input('idActivity') as $activity)
+    {
+        $a = 0;
+        foreach($request->input('idActivity') as $activity2)
+        {
+            if ($i != $a)
+            {
+                if ($activity == $activity2)
+                {
+                    $double = true;
+                }
+            }
+            
+            $a++;                
+        }
+        $i++;
+    }
+
+    return $double;
+}
+
+//función que sirve para identificar si se repite algún elemento de la lista
+function repeatResource($request)
+{
+    $double = false;
+    $i = 0;
+    foreach($request->input('resource-ID') as $activity)
+    {
+        $a = 0;
+        foreach($request->input('resource-ID') as $activity2)
+        {
+            if ($i != $a)
+            {
+                if ($activity == $activity2)
+                {
+                    $double = true;
+                }
+            }
+            
+            $a++;                
+        }
+        $i++;
+    }
+
+    return $double;
+}
+
+//función que sirve para identificar si se repite algún elemento de la lista
+function repeatUserActivity($request)
+{
+    $double = false;
+    $i = 0;
+    foreach($request->input('id-user') as $activity)
+    {
+        $a = 0;
+        foreach($request->input('id-user') as $activity2)
+        {
+            if ($i != $a)
+            {
+                if ($activity == $activity2)
+                {
+                    $double = true;
+                }
+            }
+            
+            $a++;                
+        }
+        $i++;
+    }
+
+    return $double;
 }
